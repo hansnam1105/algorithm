@@ -17,7 +17,6 @@ public class Main {
 		
 		int mapLength = (int) Math.pow(2, N);
 				
-		ans = 0;
 		searchSpace(mapLength, r, c);
 		
 		bw.write(String.valueOf(ans));
