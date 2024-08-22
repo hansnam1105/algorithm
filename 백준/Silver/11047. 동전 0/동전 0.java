@@ -20,18 +20,21 @@ public class Main {
 		for(int i=0; i<N; i++) {
 			coin[i] =parseInt(br.readLine());
 		}
-		int count = 0;
-		while(K>0) {
-			for(int i=N-1; i>=0; i--) {
-				if(coin[i]<=K) {
-					K -= coin[i];
-					count++;
-					break;
-				}
-				
+		int total = 0;
+		/*
+		 * while(K>0) { for(int i=N-1; i>=0; i--) { if(coin[i]<=K) { K -= coin[i];
+		 * total++; break; }
+		 * 
+		 * } }
+		 */
+		for(int i=N-1; i>=0; i--) {
+			if(coin[i] <= K) {
+				int count = K/coin[i];
+				K -= count * coin[i];
+				total += count;
 			}
 		}
-		bw.write(String.valueOf(count));
+		bw.write(String.valueOf(total));
 		bw.flush();
 		bw.close();
 		br.close();
