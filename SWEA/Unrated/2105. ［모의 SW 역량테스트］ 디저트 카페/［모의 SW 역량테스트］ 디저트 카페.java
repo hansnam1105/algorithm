@@ -53,12 +53,11 @@ public class Solution {
 	public static void dfs(int depth, int r, int c, int dir, int turnCount) {
 		// depth - 카페 방문 횟수 (return 값)
 		// turnCount - 사각형 -> 3번 방향을 꺾어서 도착
-		if (depth > 0 && r == startR && c == startC && turnCount == 3) {
+		if (depth > 0 && r == startR && c == startC && turnCount >= 3) {
 			maxSize = Math.max(maxSize, depth);
 			return;
 		}
-		
-
+     
 		// 한번 꺽은 방향은 다시 못 가도록 dir 활용
 		for (int i = dir; i < 4; i++) {
 			int nr = r + dr[i];
@@ -73,6 +72,11 @@ public class Solution {
 				dessert.remove(map[nr][nc]);
 				visited[nr][nc] = false; // 이전 경로에서 방문했던 좌표는 다시 탐색할 수 있어야 한다
 			}
+            
+            // 사각형을 만들기 위해 두 방향까지만 시작하도록 제한
+            if (i == 1 && dir == 0) {
+                break;
+            }
             
 
 		}
