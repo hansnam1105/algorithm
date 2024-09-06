@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.util.*;
 
@@ -53,31 +52,23 @@ public class Solution {
 	}
 	
 	static int findLCA(int node1, int node2) {
-    List<Integer> parents1 = new ArrayList<>();
-    List<Integer> parents2 = new ArrayList<>();
-    
-    while (node1 != 0) {
-        parents1.add(node1);
-        node1 = parents[node1];
+        HashSet<Integer> parentSet = new HashSet<>();
+        
+        while (node1 != 0) {
+            parentSet.add(node1);
+            node1 = parents[node1];
+        }
+
+        while (node2 != 0) {
+            if (parentSet.contains(node2)) {
+                return node2;
+            }
+            node2 = parents[node2];
+        }
+        
+        return 0;
     }
-    
-    while (node2 != 0) {
-        parents2.add(node2);
-        node2 = parents[node2];
-    }
-    
-    int lca = 0;
-    int size1 = parents1.size() - 1;
-    int size2 = parents2.size() - 1;
-    
-    while (size1 >= 0 && size2 >= 0 && parents1.get(size1).equals(parents2.get(size2))) {
-        lca = parents1.get(size1);
-        size1--;
-        size2--;
-    }
-    
-    return lca;
-}
+
 
 	
 	static int findChild(int node) {
