@@ -5,6 +5,9 @@ public class Main {
     static int N, M;
     static List<Edge>[] adj;
 
+    /*
+    * 간선 정보 저장
+    */
     static class Edge implements Comparable<Edge> {
         int to;
         int cost;
@@ -31,6 +34,7 @@ public class Main {
     			adj[i] = new ArrayList<>();
     		}
 
+            // 간선 정보 입력 인접 리스트 
     		for(int i = 0; i < M; i++){
     			st = new StringTokenizer(br.readLine());
     			int u = Integer.parseInt(st.nextToken());
@@ -48,6 +52,7 @@ public class Main {
     		bw.close();
     }
 
+    // 다익스트라 알고리즘을 사용하여 최소 비용 계산
     static int getMinCowCost(int start, int end){
         int[] dist = new int[N+1];
         Arrays.fill(dist, Integer.MAX_VALUE);
