@@ -1,92 +1,64 @@
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-
-	static int N, K, result;
-	static int map[] = new int[100001];
-	static boolean[] visited = new boolean[100001];
-	static int[] dx = { -1, 1, 2 };
-
+	
+	static final int MAX = 100_000;
+	
 	public static void main(String[] args) throws Exception {
-
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
+		StringBuilder sb = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		N = Integer.parseInt(st.nextToken());
-		K = Integer.parseInt(st.nextToken());
-
-		result = Integer.MAX_VALUE;
-		bfs();
-
-		System.out.println(result);
-
+		int N = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
+		
+		
+		sb.append(dijkstra(N,K));
+		System.out.println(sb);
+			
 	}
-
-	static void bfs() {
-
-		// 이동 위치와 시간을 담을 int배열 형태의 큐 선언
-		Queue<int[]> q = new LinkedList<>();
-
-		q.add(new int[] { N, 0 });
-		visited[N] = true;
-
-		while (!q.isEmpty()) {
-
-			int current[] = q.poll();
-			int cx = current[0];
-			int cTime = current[1];
-
-			if (cx == K) {
-				// 동생을 찾았다면
-				result = cTime;
+	
+	static int dijkstra(int start, int target) {
+		int[] dist = new int[MAX+1];
+		Arrays.fill(dist, Integer.MAX_VALUE);
+		dist[start] = 0;
+		
+		PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> Integer.compare(a[1], b[1]));
+		pq.offer(new int[] {start, 0});
+		
+		while(!pq.isEmpty()) {
+			int[] cur = pq.poll();
+			
+			int pos = cur[0];
+			int time = cur[1];
+			
+			if(pos == target) return time;
+			
+			if(time > dist[pos]) continue; // 이미 더 짧은 시간 존재시
+			
+			// 순간이동
+			if(pos * 2 <= MAX && time < dist[pos*2]) {
+				dist[pos*2] = time;
+				pq.offer(new int[] {pos*2, time});
 			}
+			
+			// 뒤로 이동 (1초)
+            if (pos - 1 >= 0 && time + 1 < dist[pos - 1]) {
+                dist[pos - 1] = time + 1;
+                pq.offer(new int[] { pos - 1, time + 1 });
+            }
 
-//			for (int d = 0; d < 3; d++) {
-//				if (d == 2) {
-//					// 순간이동이라면
-//					int nx = cx*dx[2];
-//					//타임은 증가하지 않는다.
-//					if(nx >= 0 && nx < 100001 && !visited[nx]) {
-//						visited[nx] = true;
-//						q.add(new int[] {nx,cTime});
-//					}
-//				}
-//				else {
-//					// 순간이동 아니라 그냥 이동이라면
-//					int nx = cx + dx[d];
-//					int nTime = cTime + 1;
-//					if(nx >= 0 && nx < 100001 && !visited[nx]) {
-//						visited[nx] = true;
-//						q.add(new int[] {nx,nTime});
-//					}
-//				}
-//			}
-
-			// 순간이동이라면
-			int nx = cx * 2;
-			// 타임은 증가하지 않는다.
-			if (nx >= 0 && nx < 100001 && !visited[nx]) {
-				visited[nx] = true;
-				q.add(new int[] { nx, cTime });
-			}
-
-			for (int d = 0; d < 2; d++) {
-				// 순간이동 아니라 그냥 이동이라면
-				nx = cx + dx[d];
-				int nTime = cTime + 1;
-				if (nx >= 0 && nx < 100001 && !visited[nx]) {
-					visited[nx] = true;
-					q.add(new int[] { nx, nTime });
-				}
-			}
-
+            // 앞으로 이동 (1초)
+            if (pos + 1 <= MAX && time + 1 < dist[pos + 1]) {
+                dist[pos + 1] = time + 1;
+                pq.offer(new int[] { pos + 1, time + 1 });
+            }
+			
 		}
+		
+		return -1;
+		
+		
 	}
 
 }
